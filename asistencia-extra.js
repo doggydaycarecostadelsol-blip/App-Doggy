@@ -77,14 +77,14 @@
           // No estaba en la lista de ese día: se añade con el servicio elegido.
           return B.guardarAsistenciaApp({ accion: "anadir", fechaIso: iso, perro: s.perro, perroId: s.perroId || "", servicio: servicio }, pre);
         }
-        if (fila.ok || fila.anadido) {
-          // Tiene cargo: se guarda de nuevo con el servicio nuevo para recalcular el importe.
+        if (fila.ok) {
+          // Ya recogido (tiene cargo): se guarda de nuevo con el servicio nuevo para recalcular el importe.
           return B.guardarAsistenciaApp({
-            accion: fila.ok ? "confirmar" : "anadir", fechaIso: iso,
+            accion: "confirmar", fechaIso: iso,
             perro: s.perro, perroId: s.perroId || "", servicio: servicio
           }, pre);
         }
-        // Solo previsto (todavía sin confirmar): basta con cambiar el servicio.
+        // Previsto o añadido sin recoger (sin cargo): basta con cambiar el servicio.
         return sb.from("asistencia").update({ servicio: servicio, actualizado_en: new Date().toISOString() })
           .eq("id", fila.id).then(function (u) {
             comprobar(u);

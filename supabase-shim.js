@@ -378,13 +378,14 @@
     });
   };
 
-  /* Mantiene el registro de lo generado (cargos) al confirmar, añadir, cancelar o deshacer. */
+  /* Mantiene el registro de lo generado (cargos). El importe solo existe cuando el perro está
+     RECOGIDO (accion "confirmar"). Añadir/programar, cancelar o deshacer no generan importe. */
   function sincronizarCargo(iso, ficha, nombreLibre, nombreFinal, accion, servicio, precios) {
     var del = sb.from("cargos").delete().eq("fecha", iso);
     del = ficha ? del.eq("perro_id", ficha.perroId) : del.eq("nombre_perro", sinSufijo(nombreLibre));
     return del.then(function (r) {
       comprobar(r);
-      if (accion !== "confirmar" && accion !== "anadir") return null;
+      if (accion !== "confirmar") return null;
       var clave = norm(servicio);
       var precio = precios[clave] || 0;
       if (clave === "guarderia" && ficha && ficha.precio !== null && ficha.precio !== undefined)
