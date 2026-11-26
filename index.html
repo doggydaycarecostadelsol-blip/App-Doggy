@@ -3002,7 +3002,7 @@ body.asistencia-abierta {
   .contenido>section.bloque-resumen{grid-column:auto;}
   .resumen-card{min-height:150px;}
 
-  .contenido>section:has(> #proximosEventosApp),
+  .contenido>section:has(#proximosEventosApp),
   .contenido>section:has(> .cajas-personales-grid),
   .contenido>section:has(> .tarjetas-secundarias),
   .contenido>section:has(> .estado-card){grid-column:span 2;}
@@ -3045,7 +3045,7 @@ body.asistencia-abierta {
   .eventos-app-panel{max-width:760px;margin:0 auto;}
 
   .navegacion-inferior{gap:70px;justify-content:center;}
-  .aviso-app{bottom:100px;}
+  .aviso-app{bottom:24px;}
 }
 
 /* ---------- PANTALLAS GRANDES (≥ 1400px) ---------- */
@@ -3065,6 +3065,20 @@ body.asistencia-abierta {
 </style>
 
 
+<style id="estilos-menu-eventos">
+/* Inicio: de la mitad hacia la izquierda los 3 botones; de la mitad hacia la derecha, los eventos en vertical */
+.eventos-con-menu{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:stretch;}
+.menu-lateral-app{display:flex;flex-direction:column;gap:8px;min-width:0;}
+.menu-lateral-app .nav-item{flex:1 1 0;min-height:70px;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:12px;padding:8px 12px;border:1px solid rgba(255,255,255,.06);border-radius:15px;background:linear-gradient(160deg,#101d36,#0a1428);color:#9aa8c2;text-align:left;box-shadow:0 8px 16px -12px rgba(0,0,0,.7);cursor:pointer;}
+.menu-lateral-app .nav-item span{font-size:36px;line-height:1;flex:none;}
+.menu-lateral-app .nav-item small{font-size:13px;font-weight:800;}
+.menu-lateral-app .nav-item.activo{color:#60a5fa;border-color:rgba(96,165,250,.5);}
+.menu-lateral-app .nav-item.activo span{filter:drop-shadow(0 0 10px rgba(96,165,250,.6));}
+.eventos-con-menu .eventos-grid{grid-template-columns:minmax(0,1fr);gap:8px;align-content:start;min-width:0;}
+.eventos-con-menu .eventos-grid .evento-card{grid-template-columns:auto minmax(0,1fr);grid-template-areas:"icono fecha" "titulo titulo";gap:4px 8px;min-height:70px;padding:8px 10px;}
+.eventos-con-menu .eventos-grid .evento-card .evento-fecha{justify-self:end;padding:3px 7px;font-size:10px;}
+.eventos-con-menu .eventos-grid .evento-card strong{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.2;}
+</style>
 </head>
 
 <body>
@@ -4026,10 +4040,17 @@ body.asistencia-abierta {
 
         </div>
 
-        <div id="proximosEventosApp" class="eventos-grid">
+        <div class="eventos-con-menu">
+          <nav class="menu-lateral-app" aria-label="Navegación principal">
+            <button class="nav-item activo" type="button" aria-current="page"><span>🏠</span><small>Inicio</small></button>
+            <button class="nav-item" type="button" data-destino="historial"><span>📋</span><small>Historial</small></button>
+            <button class="nav-item" type="button" data-destino="eventos"><span>📅</span><small>Eventos</small></button>
+          </nav>
+          <div id="proximosEventosApp" class="eventos-grid">
 
           <div class="eventos-app-estado">Cargando eventos...</div>
 
+        </div>
         </div>
 
       </section>
@@ -5269,85 +5290,7 @@ body.asistencia-abierta {
 
     </section>
 
-    <!-- =====================================================
-
-         NAVEGACIÓN INFERIOR
-
-         ===================================================== -->
-
-    <nav class="navegacion-inferior" aria-label="Navegación principal">
-
-      <button
-
-        class="nav-item activo"
-
-        type="button"
-
-      >
-
-        <span>
-
-          🏠
-
-        </span>
-
-        <small>
-
-          Inicio
-
-        </small>
-
-      </button>
-
-      <button
-
-        class="nav-item"
-
-        type="button"
-
-        data-destino="historial"
-
-      >
-
-        <span>
-
-          📋
-
-        </span>
-
-        <small>
-
-          Historial
-
-        </small>
-
-      </button>
-
-      <button
-
-        class="nav-item"
-
-        type="button"
-
-      >
-
-        <span>
-
-          📅
-
-        </span>
-
-        <small>
-
-          Eventos
-
-        </small>
-
-      </button>
-
-    </nav>
-
-  </div>
+    </div>
 
   <script>
   /* Convierte "1.234,50", "1234,5", "12.5", "1,234.50" o "12 €" en número con 2 decimales. NaN si no es válido. */
@@ -10765,6 +10708,9 @@ cargarGastosRecientes();
           }
 
           if (nombre === "Eventos") {
+            // Eventos abre un panel encima del inicio: el botón activo sigue siendo Inicio.
+            this.classList.remove("activo"); this.removeAttribute("aria-current");
+            botones[0].classList.add("activo"); botones[0].setAttribute("aria-current", "page");
             abrirListaEventosApp();
             return;
           }
@@ -12456,7 +12402,7 @@ cargarGastosRecientes();
   .aviso-app {
     position: fixed;
     left: 50%;
-    bottom: 132px;
+    bottom: calc(24px + env(safe-area-inset-bottom));
     z-index: 5000;
     width: calc(100% - 32px);
     max-width: 430px;
@@ -12504,6 +12450,7 @@ cargarGastosRecientes();
   }
 </style>
 
+<script src="atras.js"></script>
 </body>
 
 </html>

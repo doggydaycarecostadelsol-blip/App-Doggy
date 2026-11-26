@@ -212,7 +212,7 @@
     ["vistaRegistroApp", "vistaFacturasApp"].forEach(function (id) {
       var s = document.createElement("section");
       s.id = id; s.className = "rg-vista"; s.hidden = true;
-      app.insertBefore(s, nav);
+      if (nav && nav.parentNode === app) app.insertBefore(s, nav); else app.appendChild(s);
     });
   }
 

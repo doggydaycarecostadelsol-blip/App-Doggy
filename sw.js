@@ -1,7 +1,7 @@
 /* Service worker mínimo: permite instalar la app y abrir la pantalla aunque haya mala cobertura.
  * Los datos NUNCA se guardan aquí: las peticiones a Supabase no pasan por la caché. */
-const CACHE = "doggy-v15";
-const BASICOS = ["./", "index.html", "manifest.json", "icon-192-v2.png", "icon-512-v2.png", "favicon-v2.png", "logo-gestion.png", "logo-registro.png", "logo-facturas.png"];
+const CACHE = "doggy-v16";
+const BASICOS = ["./", "index.html", "atras.js", "manifest.json", "icon-192-v2.png", "icon-512-v2.png", "favicon-v2.png", "logo-gestion.png", "logo-registro.png", "logo-facturas.png"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(BASICOS)).then(() => self.skipWaiting()));
